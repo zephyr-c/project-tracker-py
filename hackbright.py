@@ -116,6 +116,27 @@ def add_project(input_project_title, input_description, input_max_grade):
 
     print(f"Successfully added {input_project_title}.")
 
+def get_all_grades(input_github):
+    QUERY = """
+        SELECT s.first_name, s.last_name, g.project_title, g.grade
+        FROM students AS s
+        JOIN grades AS g ON s.github = g.student_github
+        WHERE s.github = :github
+    """
+
+    db_cursor = db.session.execute(QUERY, {'github':input_github})
+
+    results = db_cursor.fetchall()
+
+    print(results[0][0], results[0][1])
+    print("---------------------------------------")
+    
+    for item in results:
+        first_name, last_name, project_title, grade = item
+        print(f"{project_title}: {grade}")
+
+
+
 
 def handle_input():
     """Main loop.
@@ -156,6 +177,13 @@ def handle_input():
             title = " ".join(args[2:])
             assign_grade(github, grade, title)
 
+        # elif command == 'add_project':
+        #     args = " ".join(args)
+        #     args = args.split(",")
+        #     project_title, description, max_grade = args
+
+        #     add_project(project_title, description, max_grade)
+
         else:
             if command != "quit":
                 print("Invalid Entry. Try again.")
@@ -164,7 +192,7 @@ def handle_input():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    #handle_input()
+    # handle_input()
 
     # To be tidy, we close our database connection -- though,
     # since this is where our program ends, we'd quit anyway.
