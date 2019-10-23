@@ -89,7 +89,7 @@ def get_grade_by_github_title(github, title):
 
 
 
-def assign_grade(input_github, input_title, input_grade):
+def assign_grade(input_github, input_grade, input_title):
     """Assign a student a grade on an assignment and print a confirmation."""
     QUERY = """
         INSERT INTO grades (student_github, project_title, grade)
@@ -127,6 +127,23 @@ def handle_input():
             first_name, last_name, github = args  # unpack!
             make_new_student(first_name, last_name, github)
 
+        elif command == 'project_title':
+            #> project_title Markov
+            project_title = " ".join(args)
+            get_project_by_title(project_title)
+
+        elif command == 'get_grade':
+            github = args[0]
+            title = " ".join(args[1:])
+            get_grade_by_github_title(github, title)
+
+        elif command == 'add_grade':
+            #> add_grade jhacks 89 Wits and Wagers
+            github = args[0]
+            grade = args[1]
+            title = " ".join(args[2:])
+            assign_grade(github, grade, title)
+
         else:
             if command != "quit":
                 print("Invalid Entry. Try again.")
@@ -135,7 +152,7 @@ def handle_input():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    # handle_input()
+    handle_input()
 
     # To be tidy, we close our database connection -- though,
     # since this is where our program ends, we'd quit anyway.
