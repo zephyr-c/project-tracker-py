@@ -117,6 +117,7 @@ def add_project(input_project_title, input_description, input_max_grade):
     print(f"Successfully added {input_project_title}.")
 
 def get_all_grades(input_github):
+    """Takes student's github and prints students's full name, projects, and grades"""
     QUERY = """
         SELECT s.first_name, s.last_name, g.project_title, g.grade
         FROM students AS s
@@ -177,12 +178,14 @@ def handle_input():
             title = " ".join(args[2:])
             assign_grade(github, grade, title)
 
-        # elif command == 'add_project':
-        #     args = " ".join(args)
-        #     args = args.split(",")
-        #     project_title, description, max_grade = args
+        elif command == 'add_project':
+            args = " ".join(args)
+            args = args.split(",")
+            project_title, description, max_grade = args
 
-        #     add_project(project_title, description, max_grade)
+            add_project(project_title, description, max_grade)
+
+        # elif command == 'all_grades'
 
         else:
             if command != "quit":
